@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSecure | Patient Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-procedures"></i> BioSecure
+            </div>
+
+            <nav class="sidebar-nav">
+                <button onclick="switchTab('overview')" class="nav-item active" id="tab-overview">
+                    <i class="fas fa-th-large"></i> Overview
+                </button>
+                <button onclick="switchTab('history')" class="nav-item" id="tab-history">
+                    <i class="fas fa-file-medical-alt"></i> Medical History
+                </button>
+                <button onclick="switchTab('appointments')" class="nav-item" id="tab-appointments">
+                    <i class="fas fa-calendar-alt"></i> Appointments
+                </button>
+                <button onclick="switchTab('digitalid')" class="nav-item" id="tab-digitalid">
+                    <i class="fas fa-id-card"></i> Digital ID
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div>
+                        <span class="user-name" id="usernameDisplay">Patient...</span>
+                        <span class="user-role">Patient</span>
+                    </div>
+                </div>
+                <!-- Chat Link -->
+                <a href="secure_chat.html" class="logout-btn"
+                    style="margin-right:0.5rem; text-decoration:none; color:var(--accent-secure); border-color:var(--accent-secure);"
+                    title="Secure Chat">
+                    <i class="fas fa-lock"></i>
+                </a>
+                <button id="logoutBtn" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content-area">
+            <header class="top-header">
+                <h2 id="pageTitle">Overview</h2>
+                <div class="date-display" id="dateDisplay">Loading...</div>
+            </header>
+
+            <!-- 1. Overview -->
+            <div id="view-overview" class="view-section">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-left: 4px solid #10b981;">
+                        <h3><i class="fas fa-calendar-check" style="color: #10b981;"></i> Upcoming Appts</h3>
+                        <p class="stat-number" id="upAppCount">0</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <!-- Quick Action: Show ID -->
+                    <div class="stat-card" onclick="switchTab('digitalid')"
+                        style="cursor:pointer; border-left: 4px solid var(--accent-secure);">
+                        <h3><i class="fas fa-qrcode"></i> Show Digital ID</h3>
+                        <p style="color:#aaa;">For check-in at reception</p>
+                    </div>
+                    <!-- Quick Action: Book Appt -->
+                    <div class="stat-card" onclick="switchTab('appointments')"
+                        style="cursor:pointer; border-left: 4px solid #3b82f6;">
+                        <h3><i class="fas fa-plus-circle"></i> Book Appointment</h3>
+                        <p style="color:#aaa;">Schedule a visit with a doctor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Medical History -->
+            <div id="view-history" class="view-section" style="display: none;">
+                <div id="historyContainer"></div>
+            </div>
+
+            <!-- 3. Appointments -->
+            <div id="view-appointments" class="view-section" style="display: none;">
+                <!-- Split into Booking Form and List -->
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+                    <!-- Form Card -->
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Book New</span></div>
+                        <div class="card-body">
+                            <form onsubmit="bookAppointment(event)">
+                                <div class="form-group">
+                                    <label>Select Doctor</label>
+                                    <select id="docSelect"
+                                        style="background:#111; color:white; border:1px solid #444; padding:0.5rem; width:100%; border-radius:4px;">
+                                        <option>Loading...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date & Time</label>
+                                    <input type="datetime-local" id="appDate" required
+                                        style="background:#111; color:white; border:1px solid #444; padding:0.5rem; width:100%; border-radius:4px;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <input type="text" id="appReason" placeholder="Reason for visit" required
+                                        style="background:#111; color:white; border:1px solid #444; padding:0.5rem; width:100%; border-radius:4px;">
+                                </div>
+                                <button type="submit" class="btn-primary">Book Now</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- List container -->
+                    <div class="log-container">
+                        <table class="log-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appTableBody"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4. Digital ID -->
+            <div id="view-digitalid" class="view-section" style="display: none;">
+                <div style="display:flex; justify-content:center; padding-top:2rem;">
+                    <div class="card"
+                        style="text-align:center; max-width:400px; border-top: 5px solid var(--accent-secure);">
+                        <div class="card-header" style="justify-content:center; border-bottom:none;">
+                            <span class="card-title" style="font-size:1.5rem; color:var(--accent-secure);">BioSecure
+                                ID</span>
+                        </div>
+                        <div id="qrcode" style="display:flex; justify-content:center; margin:1rem 0;"></div>
+                        <h3 id="pNameID" style="color:white;">Loading...</h3>
+                        <p id="pIdID" style="color:#aaa;">...</p>
+
+                        <div style="margin-top:1rem; background:#111; padding:0.5rem; border-radius:4px;">
+                            <label style="font-size:0.7rem; color:#666;">MANUAL TOKEN</label>
+                            <input type="text" id="rawToken" readonly
+                                style="width:100%; background:transparent; border:none; color:#888; text-align:center; font-family:monospace;">
+                            <button onclick="copyToken()"
+                                style="background:none; border:none; color:var(--accent-secure); cursor:pointer; margin-top:5px;">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scanner Util -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/patient_dashboard.js"></script>
+    <script>
+        document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+    </script>
+</body>
+
+</html>

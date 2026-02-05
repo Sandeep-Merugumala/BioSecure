@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSecure | Next Gen E-Health</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .landing-navbar {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem;
+            height: 80vh;
+        }
+
+        .hero-content {
+            max-width: 50%;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, white, var(--accent-secure));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 80%;
+        }
+
+        .hero-image-container {
+            max-width: 45%;
+            position: relative;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 80px rgba(6, 182, 212, 0.4);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--accent-secure);
+            color: #0f172a;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="landing-navbar">
+        <div class="nav-brand" style="font-size: 1.5rem;">
+            <i class="fas fa-dna"></i> BioSecure
+        </div>
+        <div class="nav-links">
+            <a href="#" style="color: white; text-decoration: none; margin-right: 2rem;">Home</a>
+            <a href="#solutions"
+                style="color: var(--text-secondary); text-decoration: none; margin-right: 2rem;">Solutions</a>
+            <a href="#security"
+                style="color: var(--text-secondary); text-decoration: none; margin-right: 2rem;">Security</a>
+            <a href="login.html"
+                style="color: var(--accent-secure); text-decoration: none; border: 1px solid var(--accent-secure); padding: 0.5rem 1.5rem; border-radius: 20px;">
+                <i class="fas fa-lock"></i> Portal Login
+            </a>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <div style="color: var(--accent-secure); letter-spacing: 2px; margin-bottom: 1rem; font-weight: bold;">
+                WELCOME TO THE FUTURE
+            </div>
+            <h1 class="hero-title">
+                In Pursuit of <br>
+                Better Health <br>
+                Security.
+            </h1>
+            <p class="hero-subtitle">
+                Experience the next generation of medical data protection.
+                Encrypted, distributed, and strictly authorized access for doctors and patients.
+            </p>
+            <a href="login.html" class="cta-btn">
+                Access Portal <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+            </a>
+        </div>
+        <div class="hero-image-container">
+            <img src="hero-image.png" alt="Futuristic Medical Interface" class="hero-image">
+        </div>
+    </div>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="section-padding">
+        <div class="section-header">
+            <h2 class="section-title">Healthcare Solutions</h2>
+            <p class="section-subtitle">Comprehensive tools designed for modern medical facilities and patient care.</p>
+        </div>
+        <div class="solutions-grid">
+            <div class="feature-card">
+                <i class="fas fa-database card-icon"></i>
+                <h3 class="card-title">Secure Records</h3>
+                <p class="card-desc">Centralized patient database with military-grade encryption ensuring data integrity
+                    and availability.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-md card-icon"></i>
+                <h3 class="card-title">Telemedicine</h3>
+                <p class="card-desc">Integrated HD video consultation platform enabling remote diagnosis and care
+                    delivery.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-microscope card-icon"></i>
+                <h3 class="card-title">Smart Diagnostics</h3>
+                <p class="card-desc">AI-powered diagnostic tools to assist medical professionals in early disease
+                    detection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="security-section section-padding">
+        <div class="section-header">
+            <h2 class="section-title">Uncompromising Security</h2>
+            <p class="section-subtitle">Built with a "Security First" architecture to protect sensitive medical data.
+            </p>
+        </div>
+        <div class="security-content">
+            <div class="security-info">
+                <ul class="security-list">
+                    <li class="security-item">
+                        <div class="security-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 0.5rem;">End-to-End Encryption</h3>
+                            <p style="color: var(--text-secondary);">All data in transit and at rest is encrypted using
+                                AES-256 protocols.</p>
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon"><i class="fas fa-fingerprint"></i></div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 0.5rem;">Multi-Factor Authentication</h3>
+                            <p style="color: var(--text-secondary);">Strict access controls requiring biometric or
+                                token-based verification.</p>
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon"><i class="fas fa-user-shield"></i></div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 0.5rem;">Role-Based Access</h3>
+                            <p style="color: var(--text-secondary);">Granular permission settings ensuring users only
+                                access what they need.</p>
+                        </div>
+                    </li>
+                    <li class="security-item">
+                        <div class="security-icon"><i class="fas fa-network-wired"></i></div>
+                        <div>
+                            <h3 style="color: white; margin-bottom: 0.5rem;">Threat Monitoring</h3>
+                            <p style="color: var(--text-secondary);">24/7 real-time monitoring system to detect and
+                                neutralize cyber threats.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="security-visual" style="text-align: center;">
+                <i class="fas fa-lock" style="font-size: 10rem; color: rgba(6, 182, 212, 0.2);"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="footer-brand"><i class="fas fa-dna"></i> BioSecure</a>
+                <p>Pioneering the future of secure healthcare technology. Protecting lives and data.</p>
+            </div>
+            <div class="footer-col footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="login.html">Portal Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Compliance</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-links">
+                <h4>Connect</h4>
+                <div style="font-size: 1.5rem; display: flex; gap: 1rem;">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 BioSecure Health Systems. All rights reserved.
+        </div>
+    </footer>
+</body>
+
+</html>

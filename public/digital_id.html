@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital ID | BioSecure</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+        }
+
+        .id-card {
+            background: white;
+            color: black;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            width: 350px;
+            border-top: 10px solid var(--accent-secure);
+        }
+
+        .id-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="id-card">
+        <div class="id-header">
+            <h2><i class="fas fa-hospital-user"></i> BioSecure ID</h2>
+            <p>Secure Patient Identity</p>
+        </div>
+
+        <div id="qrcode" style="display: flex; justify-content: center; margin-bottom: 1.5rem;"></div>
+
+        <h3 id="pName">Loading...</h3>
+        <p id="pId" style="color: #666; font-family: monospace;">...</p>
+
+        <!-- Raw Token for Manual Entry -->
+        <div style="margin-top: 1rem; text-align: left;">
+            <label style="font-size: 0.8rem; color: #888;">Digital Token (for Manual Check-in):</label>
+            <div
+                style="background: #f3f4f6; padding: 8px; border-radius: 6px; border: 1px solid #ddd; display: flex; gap: 5px;">
+                <input type="text" id="rawToken" readonly
+                    style="width: 100%; border: none; background: transparent; font-family: monospace; font-size: 0.8rem; outline: none; color: #555;"
+                    value="Loading...">
+                <button onclick="copyToken()"
+                    style="border: none; background: none; cursor: pointer; color: var(--accent-secure);" title="Copy">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <p style="font-size: 0.8rem; color: #888;">Present this to your doctor for scanning.</p>
+            <a href="patient_dashboard.html" class="btn-primary"
+                style="display: block; margin-top: 1rem; text-decoration: none;">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/user');
+                const data = await res.json();
+                if (!data.loggedIn || data.user.role !== 'patient') {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const user = data.user;
+                document.getElementById('pName').innerText = user.full_name;
+                document.getElementById('pId').innerText = "ID: " + user.id;
+
+                // Encoding Logic
+                const rawData = `ID:${user.id}|${user.full_name}|${user.role}`;
+                const token = btoa(rawData);
+
+                // Show Token
+                document.getElementById('rawToken').value = token;
+
+                new QRCode(document.getElementById("qrcode"), {
+                    text: token,
+                    width: 200,
+                    height: 200
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Failed to load ID");
+            }
+        });
+
+        function copyToken() {
+            const copyText = document.getElementById("rawToken");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Token Copied!");
+        }
+    </script>
+</body>
+
+</html>

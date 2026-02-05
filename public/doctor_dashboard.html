@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSecure | Doctor Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-user-md"></i> BioSecure
+            </div>
+
+            <nav class="sidebar-nav">
+                <button onclick="switchTab('overview')" class="nav-item active" id="tab-overview">
+                    <i class="fas fa-th-large"></i> Overview
+                </button>
+                <button onclick="switchTab('patients')" class="nav-item" id="tab-patients">
+                    <i class="fas fa-user-injured"></i> My Patients
+                </button>
+                <button onclick="switchTab('appointments')" class="nav-item" id="tab-appointments">
+                    <i class="fas fa-calendar-check"></i> Appointments
+                </button>
+                <button onclick="switchTab('scanner')" class="nav-item" id="tab-scanner">
+                    <i class="fas fa-qrcode"></i> ID Scanner
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div>
+                        <span class="user-name" id="usernameDisplay">Dr. ...</span>
+                        <span class="user-role">Doctor</span>
+                    </div>
+                </div>
+                <!-- Chat Link (Quick Action in Footer) -->
+                <a href="secure_chat.html" class="logout-btn"
+                    style="margin-right:0.5rem; text-decoration:none; color:var(--accent-secure); border-color:var(--accent-secure);"
+                    title="Secure Chat">
+                    <i class="fas fa-lock"></i>
+                </a>
+                <button id="logoutBtn" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content-area">
+            <header class="top-header">
+                <h2 id="pageTitle">Overview</h2>
+                <div class="date-display" id="dateDisplay">Loading...</div>
+            </header>
+
+            <!-- 1. Overview -->
+            <div id="view-overview" class="view-section">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-left: 4px solid #3b82f6;">
+                        <h3><i class="fas fa-user-injured" style="color: #3b82f6;"></i> Assigned Patients</h3>
+                        <p class="stat-number" id="patCount">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #10b981;">
+                        <h3><i class="fas fa-calendar-day" style="color: #10b981;"></i> Today's Appts</h3>
+                        <p class="stat-number" id="apptCount">0</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:2rem; margin-bottom:1rem; color:white;">Quick Actions</h3>
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="switchTab('scanner')"
+                        style="cursor:pointer; border-left: 4px solid var(--accent-secure);">
+                        <h3><i class="fas fa-qrcode"></i> Scan Patient ID</h3>
+                        <p style="color:#aaa; font-size:0.9rem;">Verify identity using QR scanner</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Patients -->
+            <div id="view-patients" class="view-section" style="display: none;">
+                <div id="patientsContainer"></div> <!-- Injected by JS -->
+            </div>
+
+            <!-- 3. Appointments -->
+            <div id="view-appointments" class="view-section" style="display: none;">
+                <div id="appointmentsContainer"></div> <!-- Injected by JS -->
+            </div>
+
+            <!-- 4. Scanner -->
+            <div id="view-scanner" class="view-section" style="display: none;">
+                <div class="card" style="max-width:600px; margin:0 auto;">
+                    <div class="card-header">
+                        <span class="card-title">Patient Check-in (QR or Manual)</span>
+                    </div>
+                    <div class="card-body" style="text-align:center;">
+                        <input type="text" id="scanInput" placeholder="Paste Digital Token here..."
+                            style="padding:1rem; width:100%; box-sizing:border-box; background:#111; color:white; border:1px solid #444; border-radius:6px; margin-bottom:1rem;">
+
+                        <button onclick="verifyPatient()" class="btn-primary">
+                            <i class="fas fa-search"></i> Verify Identity
+                        </button>
+
+                        <div id="scanResult" style="margin-top:1.5rem; padding:1rem; border-radius:6px; display:none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Edit Record Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Edit Medical Record</span>
+                <button onclick="closeModal()" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editRecordId">
+                <div class="form-group">
+                    <label>Diagnosis</label>
+                    <input type="text" id="editDiagnosis" placeholder="Update diagnosis...">
+                </div>
+                <div class="form-group">
+                    <label>Prescription</label>
+                    <input type="text" id="editPrescription" placeholder="Update prescription...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitEdit()" class="btn-primary" style="width: auto;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Record Modal -->
+    <div id="createModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Create New Record</span>
+                <button onclick="closeCreateModal()" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="createPatientId">
+                <div class="form-group">
+                    <label>Diagnosis</label>
+                    <input type="text" id="createDiagnosis" placeholder="Enter diagnosis...">
+                </div>
+                <div class="form-group">
+                    <label>Prescription</label>
+                    <input type="text" id="createPrescription" placeholder="Enter prescription...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeCreateModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitCreate()" class="btn-primary" style="width: auto;">Create & Sign</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/doctor_dashboard.js"></script>
+    <script>
+        document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+    </script>
+</body>
+
+</html>

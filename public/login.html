@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSecure | Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2 class="auth-title"><i class="fas fa-shield-virus"></i> BioSecure Portal</h2>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Select Actor Role</label>
+                    <select id="role" name="role">
+                        <option value="doctor">Doctor</option>
+                        <option value="patient">Patient</option>
+                        <option value="admin">System Admin</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    <div style="text-align: right; margin-top: 5px;">
+                        <a href="forgot_password.html"
+                            style="font-size: 0.85rem; color: var(--accent-secure); text-decoration: none;">Forgot
+                            Password?</a>
+                    </div>
+                </div>
+
+                <div id="errorMessage"
+                    style="color: var(--accent-alert); text-align: center; margin-bottom: 1rem; display: none;"></div>
+
+                <button type="submit" class="btn-primary">Next <i class="fas fa-arrow-right"></i></button>
+            </form>
+
+            <form id="otpForm" style="display: none;">
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label>Enter Verification Code</label>
+                    <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                        <input type="text" id="otp" name="otp" placeholder="123456"
+                            style="letter-spacing: 0.5rem; text-align: center; font-size: 1.5rem;" required
+                            maxlength="6">
+                    </div>
+                    <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 0.5rem;">
+                        Code sent to your email. Check console (mock).
+                    </p>
+                </div>
+
+                <div id="otpErrorMessage"
+                    style="color: var(--accent-alert); text-align: center; margin-bottom: 1rem; display: none;"></div>
+
+                <button type="submit" class="btn-primary">Verify & Login <i class="fas fa-fingerprint"></i></button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1rem;">
+                New User? <a href="register.html" style="color: var(--accent-primary);">Create Account</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

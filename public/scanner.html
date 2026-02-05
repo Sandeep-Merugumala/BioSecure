@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Scanner | BioSecure</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+        }
+
+        .scanner-box {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 400px;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanner-box">
+        <h2 style="text-align: center; color: var(--accent-secure); margin-bottom: 2rem;">
+            <i class="fas fa-qrcode"></i> Patient Check-in
+        </h2>
+
+        <p style="color: #aaa; text-align: center; margin-bottom: 1rem;">
+            Scan the patient's QR code or enter their token manually.
+        </p>
+
+        <input type="text" id="scanInput" placeholder="Click here and scan..."
+            style="width: 100%; padding: 12px; margin-bottom: 1rem; background: #333; border: 1px solid #555; color: white; border-radius: 6px;">
+
+        <button onclick="verifyPatient()" class="btn-primary" style="width: 100%; background: var(--accent-secure);">
+            Verify Identity
+        </button>
+
+        <div id="scanResult" style="margin-top: 1.5rem; display: none; padding: 1rem; border-radius: 6px;"></div>
+
+        <a href="doctor_dashboard.html"
+            style="display: block; text-align: center; margin-top: 2rem; color: #888; text-decoration: none;">&larr;
+            Back to Dashboard</a>
+    </div>
+
+    <script>
+        async function verifyPatient() {
+            const input = document.getElementById('scanInput').value.trim();
+            const resultDiv = document.getElementById('scanResult');
+
+            if (!input) {
+                alert("Please scan a code first.");
+                return;
+            }
+
+            try {
+                // Decoding Feature
+                const decoded = atob(input);
+
+                if (decoded.startsWith("ID:") && decoded.includes("|")) {
+                    const parts = decoded.split("|");
+                    const id = parts[0].split(":")[1];
+                    const name = parts[1];
+                    const role = parts[2];
+
+                    resultDiv.style.display = "block";
+                    resultDiv.style.backgroundColor = "rgba(16, 185, 129, 0.2)";
+                    resultDiv.style.border = "1px solid #10b981";
+                    resultDiv.style.color = "#10b981";
+
+                    resultDiv.innerHTML = `
+                        <div style="text-align: center;">
+                            <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i><br>
+                            <strong>Identity Verified</strong><br>
+                            <span style="font-size: 1.2rem; display: block; margin: 10px 0;">${name}</span>
+                            <small>ID: ${id}</small>
+                        </div>
+                    `;
+                } else {
+                    throw new Error("Invalid Format");
+                }
+            } catch (err) {
+                resultDiv.style.display = "block";
+                resultDiv.style.backgroundColor = "rgba(239, 68, 68, 0.2)";
+                resultDiv.style.border = "1px solid #ef4444";
+                resultDiv.style.color = "#ef4444";
+                resultDiv.innerHTML = `<center><strong><i class="fas fa-times-circle"></i> Invalid Token</strong></center>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

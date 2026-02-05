@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSecure | Admin Console</title>
+    <link rel="stylesheet" href="css/style.css?v=fixed">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-shield-alt"></i> BioSecure
+            </div>
+
+            <nav class="sidebar-nav">
+                <button onclick="switchTab('overview')" class="nav-item active" id="tab-overview">
+                    <i class="fas fa-th-large"></i> Overview
+                </button>
+                <button onclick="switchTab('users')" class="nav-item" id="tab-users">
+                    <i class="fas fa-users"></i> Users
+                </button>
+                <button onclick="switchTab('appointments')" class="nav-item" id="tab-appointments">
+                    <i class="fas fa-calendar-alt"></i> Appointments
+                </button>
+                <button onclick="switchTab('logs')" class="nav-item" id="tab-logs">
+                    <i class="fas fa-history"></i> Audit Logs
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div>
+                        <span class="user-name" id="usernameDisplay">Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content-area">
+            <!-- Header -->
+            <header class="top-header">
+                <h2 id="pageTitle">Overview</h2>
+                <div class="date-display" id="dateDisplay">Monday, Jan 01</div>
+            </header>
+
+            <!-- Views -->
+            <div id="view-overview" class="view-section">
+                <!-- Stats Grid (Same as before but wider) -->
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-left: 4px solid #3b82f6;">
+                        <h3><i class="fas fa-users" style="color: #3b82f6;"></i> Total Users</h3>
+                        <p class="stat-number" id="userCount">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #8b5cf6;">
+                        <h3><i class="fas fa-file-shield" style="color: #8b5cf6;"></i> Audit Logs</h3>
+                        <p class="stat-number" id="auditCount">0</p>
+                    </div>
+                    <div class="stat-card" style="border-left: 4px solid #10b981;">
+                        <h3><i class="fas fa-calendar-check" style="color: #10b981;"></i> Appointments</h3>
+                        <p class="stat-number" id="appCount">0</p>
+                    </div>
+                    <div class="stat-card" id="healthCard" style="border-left: 4px solid #ef4444;">
+                        <h3><i class="fas fa-heartbeat" style="color: #ef4444;"></i> System Health</h3>
+                        <p class="status-indicator" style="margin-top: 5px;">
+                            <span id="healthDot" class="status-dot"></span>
+                            <span id="healthText">Loading...</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-users" class="view-section" style="display: none;">
+                <div class="log-container">
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-appointments" class="view-section" style="display: none;">
+                <div class="log-container">
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Doctor</th>
+                                <th>Patient</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-logs" class="view-section" style="display: none;">
+                <div class="log-container">
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User (ID)</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Hash Integrity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin_dashboard.js"></script>
+    <script>
+        // Simple date script
+        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+        document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('en-US', options);
+
+        // Update Title on Switch
+        const originalSwitch = window.switchTab;
+        window.switchTab = function (tabName) {
+            // Call original logic (which is in external JS, but we need to ensure ID matching matches)
+            // Actually, we replaced the Navbar buttons with Sidebar buttons.
+            // The logic in admin_dashboard.js targets .tab-btn and .view-section.
+            // We need to update ID names or classes to match.
+            document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
+            document.getElementById('view-' + tabName).style.display = 'block';
+
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            // Update Title
+            const titles = {
+                'overview': 'System Overview',
+                'users': 'User Management',
+                'appointments': 'Appointments',
+                'logs': 'Security Audit Logs'
+            };
+            document.getElementById('pageTitle').innerText = titles[tabName];
+
+            // Load Data
+            if (typeof loadUsers === 'function') {
+                if (tabName === 'users') loadUsers();
+                if (tabName === 'appointments') loadAppointments();
+                if (tabName === 'logs') loadLogs();
+                if (tabName === 'overview') loadStats();
+            }
+        }
+    </script>
+</body>
+
+</html>
