@@ -43,7 +43,7 @@ Ensure you have the following installed on your machine:
 
 1.  **Clone the Repository**
     ```bash
-    git clone https://github.com/yourusername/biosecure.git
+    git clone https://github.com/Sandeep-Merugumala/BioSecure.git
     cd biosecure
     ```
 
@@ -111,3 +111,4 @@ This project is a demonstration of how to apply cybersecurity principles in soft
 ## 📄 License
 
 This project is licensed under the ISC License.
+
